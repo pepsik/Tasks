@@ -1,7 +1,7 @@
-package org.aleksandr.berezovyi.task2_city.business.impl;
+package org.aleksandr.berezovyi.task2_cities.business.impl;
 
-import org.aleksandr.berezovyi.task2_city.business.CityManager;
-import org.aleksandr.berezovyi.task2_city.model.City;
+import org.aleksandr.berezovyi.task2_cities.business.CityManager;
+import org.aleksandr.berezovyi.task2_cities.model.City;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -11,13 +11,14 @@ import java.util.Map;
  * Created by pepsik on 7/5/2016.
  */
 public class CityManagerImpl implements CityManager {
-    private int numberOfCities = 0;
+    private static int counter = 0;
+
     private Map<Integer, City> citiesById = new HashMap<>();
     private Map<String, City> citiesByName = new HashMap<>();
 
     @Override
-    public City add(String name, int numberOfNeighbours) {
-        City city = new City(name, numberOfNeighbours);
+    public City add(String name) {
+        City city = new City(name, ++counter);
         citiesById.put(city.getId(), city);
         citiesByName.put(city.getName(), city);
         return city;
@@ -39,7 +40,9 @@ public class CityManagerImpl implements CityManager {
     }
 
     @Override
-    public void setNumberOfCities(int number) {
-        this.numberOfCities = number;
+    public void clear() {
+        citiesById.clear();
+        citiesByName.clear();
+        counter = 0;
     }
 }

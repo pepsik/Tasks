@@ -1,4 +1,4 @@
-package org.aleksandr.berezovyi.task2_city.model;
+package org.aleksandr.berezovyi.task2_cities.model;
 
 /**
  * Created by pepsik on 7/5/2016.
@@ -24,6 +24,24 @@ public class Connection {
 
     public int getCost() {
         return cost;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Connection that = (Connection) o;
+
+        return fromCityId == that.fromCityId && toCityId == that.toCityId;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = fromCityId;
+        result = 31 * result + toCityId;
+        return result;
     }
 
     @Override

@@ -1,16 +1,14 @@
-package org.aleksandr.berezovyi.task2_city.model;
+package org.aleksandr.berezovyi.task2_cities.model;
 
 /**
  * Created by pepsik on 7/5/2016.
  */
 public class City {
-    public static int counter = 0;
-
     private int id;
     private String name;
 
-    public City(String name, int numberOfNeighbours) {
-        this.id = ++counter;
+    public City(String name, int id) {
+        this.id = id;
         this.name = name;
     }
 
