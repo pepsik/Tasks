@@ -16,6 +16,10 @@ public class CityManagerImpl implements CityManager {
     private Map<Integer, City> citiesById = new HashMap<>();
     private Map<String, City> citiesByName = new HashMap<>();
 
+    public static void clearCount() {
+        counter = 0;
+    }
+
     @Override
     public City add(String name) {
         City city = new City(name, ++counter);
@@ -37,12 +41,5 @@ public class CityManagerImpl implements CityManager {
     @Override
     public Collection<City> getAll() {
         return citiesById.values();
-    }
-
-    @Override
-    public void clear() {
-        citiesById.clear();
-        citiesByName.clear();
-        counter = 0;
     }
 }

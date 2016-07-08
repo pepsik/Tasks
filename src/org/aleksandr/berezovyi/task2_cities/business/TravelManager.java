@@ -16,6 +16,4 @@ public interface TravelManager {
     int findLowerCostPath(City from, City to);
 
     Set<Connection> getAll();
-
-    void clear();
 }

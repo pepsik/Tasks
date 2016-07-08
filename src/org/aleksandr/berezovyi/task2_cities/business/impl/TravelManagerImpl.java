@@ -46,7 +46,9 @@ public class TravelManagerImpl implements TravelManager {
 
         for (int i = 0; i < cityList.size(); i++) {
             int minCost = INF;
-            exploredCity[currCityId - 1] = true;
+            if (currCityId != to.getId())
+                exploredCity[currCityId - 1] = true;
+
             Set<Connection> paths = findAllPaths(cityList.get(currCityId - 1));
             for (Connection path : paths) {
                 if (exploredCity[path.getToCityId() - 1])
@@ -62,7 +64,7 @@ public class TravelManagerImpl implements TravelManager {
 
             if (minCost == INF) {
                 for (int j = 0; j < exploredCity.length; j++) {
-                    if (!exploredCity[j] && travelCosts[j] != INF) {
+                    if (!exploredCity[j] && to.getId() != (j + 1) && travelCosts[j] != INF) {
                         currCityId = j + 1;
                     }
                 }
@@ -71,13 +73,7 @@ public class TravelManagerImpl implements TravelManager {
         return travelCosts[to.getId() - 1];
     }
 
-
     public Set<Connection> getAll() {
         return connections;
-    }
-
-    @Override
-    public void clear() {
-        connections.clear();
     }
 }

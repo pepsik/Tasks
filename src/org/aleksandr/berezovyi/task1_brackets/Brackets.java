@@ -33,7 +33,7 @@ public class Brackets {
     }
 
     public static void main(String[] args) {
-        int N = 3;
+        int N = 4;
         Brackets.getSequence(N * 2, 0);
         Brackets.sequences.forEach(System.out::println);
     }

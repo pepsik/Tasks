@@ -15,6 +15,4 @@ public interface CityManager {
     City find(int id);
 
     Collection<City> getAll();
-
-    void clear();
 }
