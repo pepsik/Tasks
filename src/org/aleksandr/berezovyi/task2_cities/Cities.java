@@ -28,7 +28,7 @@ public class Cities {
                     City created = cityManager.add(cityName);
                     for (int j = 0; j < neighboursCount; j++) {
                         String[] parts = scanIn.nextLine().split(" ");
-                        travelManager.addConnection(created.getId(), Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
+                        travelManager.addPath(created.getId(), Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
                     }
                 }
                 int pathsToFind = Integer.parseInt(scanIn.nextLine());

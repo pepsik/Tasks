@@ -3,7 +3,7 @@ package org.aleksandr.berezovyi.task2_cities.business.impl;
 import org.aleksandr.berezovyi.task2_cities.business.CityManager;
 import org.aleksandr.berezovyi.task2_cities.business.TravelManager;
 import org.aleksandr.berezovyi.task2_cities.model.City;
-import org.aleksandr.berezovyi.task2_cities.model.Connection;
+import org.aleksandr.berezovyi.task2_cities.model.Path;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class TravelManagerImpl implements TravelManager {
     public static final int INF = 1_000;
 
-    private Set<Connection> connections = new HashSet<>();
+    private Set<Path> paths = new HashSet<>();
     private CityManager cityManager;
 
     public TravelManagerImpl(CityManager cityManager) {
@@ -22,58 +22,65 @@ public class TravelManagerImpl implements TravelManager {
     }
 
     @Override
-    public void addConnection(int fromCityId, int toCityId, int cost) {
-        Connection connection = new Connection(fromCityId, toCityId, cost);
-        connections.add(connection);
+    public void addPath(int srcId, int destId, int cost) {
+        Path path = new Path(srcId, destId, cost);
+        paths.add(path);
     }
 
     @Override
-    public Set<Connection> findAllPaths(City from) {
-        return connections.stream().filter(connection -> connection.getFromCityId() == from.getId()).collect(Collectors.toSet());
+    public Set<Path> findAllPaths(City src) {
+        return paths.stream().filter(path -> path.getSrcId() == src.getId()).collect(Collectors.toSet());
     }
 
     /**
      * Using Dijkstra's algorithm to find the shortest ways to move from one first city to each other city in the graph
      **/
     @Override
-    public int findLowerCostPath(City from, City to) {
+    public int findLowerCostPath(City src, City dest) {
         List<City> cityList = new ArrayList<>(cityManager.getAll());
-        int[] travelCosts = new int[cityList.size()];
+        int[] travelCosts = new int[cityList.size()]; // accumulate minimum travel costs through each city
         boolean[] exploredCity = new boolean[cityList.size()];
-        int currCityId = from.getId();
-        Arrays.fill(travelCosts, INF);
-        travelCosts[currCityId - 1] = 0;
+        int currCityId = src.getId();
+        Arrays.fill(travelCosts, INF); //All travel costs are INF
+        travelCosts[currCityId - 1] = 0; //except src
 
+        //Iterate
         for (int i = 0; i < cityList.size(); i++) {
             int minCost = INF;
-            if (currCityId != to.getId())
+            // if we get destination, ignore, it will be last explored city
+            if (currCityId != dest.getId())
                 exploredCity[currCityId - 1] = true;
-
-            Set<Connection> paths = findAllPaths(cityList.get(currCityId - 1));
-            for (Connection path : paths) {
-                if (exploredCity[path.getToCityId() - 1])
+            //find all paths of city to iterate
+            Set<Path> paths = findAllPaths(cityList.get(currCityId - 1));
+            for (Path path : paths) {
+                if (exploredCity[path.getDestId() - 1])
                     continue;
-                if (path.getCost() + travelCosts[path.getFromCityId() - 1] < travelCosts[path.getToCityId() - 1]) {
-                    travelCosts[path.getToCityId() - 1] = travelCosts[path.getFromCityId() - 1] + path.getCost();
+                //if from city cost + path cost < to city cost, then assign new value
+                if (path.getCost() + travelCosts[path.getSrcId() - 1] < travelCosts[path.getDestId() - 1]) {
+                    travelCosts[path.getDestId() - 1] = travelCosts[path.getSrcId() - 1] + path.getCost();
                 }
+                //find minimum path cost of cur city
                 if (path.getCost() < minCost) {
                     minCost = path.getCost();
-                    currCityId = path.getToCityId();
+                    currCityId = path.getDestId();
                 }
             }
-
+            //to find remaining not explored cities
             if (minCost == INF) {
                 for (int j = 0; j < exploredCity.length; j++) {
-                    if (!exploredCity[j] && to.getId() != (j + 1) && travelCosts[j] != INF) {
+                    if (!exploredCity[j] && dest.getId() != (j + 1) && travelCosts[j] != INF) {
                         currCityId = j + 1;
                     }
                 }
             }
         }
-        return travelCosts[to.getId() - 1];
+        //last explored city is destination
+        exploredCity[dest.getId() - 1] = true;
+
+        return travelCosts[dest.getId() - 1];
     }
 
-    public Set<Connection> getAll() {
-        return connections;
+    public Set<Path> getAll() {
+        return paths;
     }
 }
