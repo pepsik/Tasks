@@ -16,9 +16,11 @@ public class SumFactorial {
             result = result.multiply(valueOf(i));
         }
 
-        while (result.compareTo(valueOf(2)) > 0){
+        while (result.compareTo(valueOf(2)) > 0) {
             sum = sum.add(result.remainder(valueOf(10)));
             result = result.divide(valueOf(10));
         }
+
+        System.out.println("Result - " + sum);
     }
 }

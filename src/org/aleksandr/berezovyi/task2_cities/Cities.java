@@ -9,7 +9,7 @@ import org.aleksandr.berezovyi.task2_cities.model.City;
 import java.io.*;
 import java.util.Scanner;
 
-public class Main {
+public class Cities {
     public static void main(String[] args) {
 
         CityManager cityManager = new CityManagerImpl();
